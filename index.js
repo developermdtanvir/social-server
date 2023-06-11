@@ -37,6 +37,10 @@ io.on("connection", (socket) => {
     socket.on("send_message", (data) => {
         socket.to(data.room).emit("receive_message", data);
     });
+
+    socket.on("send_notification", (data) => {
+        io.emit("new_notification", data)
+    })
 });
 
 
@@ -87,6 +91,14 @@ async function run() {
             }
             const cursor = await postCollection.find(queary)
             const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        app.delete('/posts/:id', async (req, res) => {
+            const id = req.params.id;
+            const queary = { _id: new ObjectId(id) }
+            console.log(queary);
+            const result = await postCollection.deleteOne(queary);
             res.send(result);
         })
 
