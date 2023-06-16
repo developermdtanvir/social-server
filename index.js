@@ -21,6 +21,7 @@ const profileRouter = require('./router/profileRouter');
 const commentRouter = require('./router/commentRouter');
 const reactRouter = require('./router/reactRouter');
 const saveRouter = require('./router/saveRouter');
+const postRouter = require('./router/postRouter')
 
 
 
@@ -28,6 +29,7 @@ app.use('/profile', profileRouter);
 app.use('/comment', commentRouter);
 app.use('/react', reactRouter);
 app.use('/save', saveRouter);
+app.use('/posts', postRouter);
 
 
 
