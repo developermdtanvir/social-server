@@ -19,7 +19,6 @@ router.get('/', async (req, res) => {
     const email = req.query.email
     let queary = { email: email }
     const result = await profileCollection.findOne(queary)
-    console.log(result)
     res.send(result);
 })
 

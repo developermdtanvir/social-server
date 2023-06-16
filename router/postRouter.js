@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { postCollection } = require('../db')
 
-app.post('/post', async (req, res) => {
+router.post('/post', async (req, res) => {
     const post = req.body;
     const result = await postCollection.insertOne(post);
     res.send(result);
@@ -29,7 +29,7 @@ router.delete('/:id', async (req, res) => {
     res.send(result);
 })
 
-app.get('/', async (req, res) => {
+router.get('/', async (req, res) => {
     const color = req.query.color
     let queary = { color: color }
     const cursor = await postCollection.find(queary)
@@ -37,7 +37,7 @@ app.get('/', async (req, res) => {
     res.send(result);
 })
 
-app.patch('/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
     const id = req.params.id;
     const email = req.query.email
     console.log(email)

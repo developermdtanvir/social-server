@@ -1,6 +1,8 @@
 const express = require('express');
+const { reactCollection } = require('../db');
 
 const router = express.Router();
+
 
 router.post('/', async (req, res) => {
     const data = req.body;
