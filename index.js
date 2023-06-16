@@ -15,6 +15,21 @@ app.use(express.json());
 
 const server = http.createServer(app);
 
+// import external router 
+
+const profileRouter = require('./router/profileRouter');
+const commentRouter = require('./router/commentRouter');
+const reactRouter = require('./router/reactRouter');
+const saveRouter = require('./router/saveRouter');
+
+
+
+app.use('/profile', profileRouter);
+app.use('/comment', commentRouter);
+app.use('/react', reactRouter);
+app.use('/save', saveRouter);
+
+
 
 
 const io = new Server(server, {
@@ -47,6 +62,7 @@ io.on("connection", (socket) => {
 
 
 
+
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -64,10 +80,8 @@ const client = new MongoClient(uri, {
 async function run() {
 
     const postCollection = client.db('social').collection('post')
-    const commentCollection = client.db('social').collection('comment')
     const saveCollection = client.db('social').collection('save')
-    const reactCollection = client.db('social').collection('react')
-    const profileCollection = client.db('social').collection('profile')
+
 
     try {
         // Connect the client to the server	(optional starting in v4.7)
@@ -126,64 +140,6 @@ async function run() {
             res.send(result);
         })
 
-        // app.post('/comment', async (req, res) => {
-        //     const updateUser = req.body.commentdata;
-        //     console.log(updateUser);
-        // })
-
-        app.post('/comment', async (req, res) => {
-
-            const comment = req.body;
-            const result = await commentCollection.insertOne(comment);
-            res.send(result);
-        })
-
-
-        app.get('/comment/:id', async (req, res) => {
-            const id = req.params.id
-            console.log(id);
-            const queary = { postId: id };
-            const result = await commentCollection.find(queary).toArray();
-            res.send(result);
-        })
-
-        app.post('/save', async (req, res) => {
-            const saveInfo = req.body;
-            const result = await saveCollection.insertOne(saveInfo);
-            res.send(result);
-        })
-
-        app.get('/save', async (req, res) => {
-            const queary = {};
-            const result = await saveCollection.find(queary).toArray();
-            res.send(result);
-        })
-
-        app.post('/react', async (req, res) => {
-            const data = req.body;
-            const result = await reactCollection.insertOne(data);
-            res.send(result);
-        })
-
-        app.get('/react', async (req, res) => {
-            const email = req.query.email;
-            const queary = { reactUserEmail: email }
-            const result = await reactCollection.find(queary).toArray()
-            res.send(result);
-
-        })
-        app.post('/profile', async (req, res) => {
-            const data = req.body;
-            const result = await profileCollection.insertOne(data);
-            res.send(result);
-        })
-
-        app.get('/profile', async (req, res) => {
-            const email = req.query.email
-            let queary = { email: email }
-            const result = await profileCollection.findOne(queary)
-            res.send(result);
-        })
 
     } finally {
         // Ensures that the client will close when you finish/error
